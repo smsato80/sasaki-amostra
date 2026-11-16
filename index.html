@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sasaki Cars, Iwata • Demonstração Conecta+</title>
+<meta name="description" content="Protótipo não oficial da Sasaki Cars em Iwata. Carros de anúncios públicos e demonstração de controle de interessados, sem envio de dados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf4f0;--panel:#ffffff;--panel2:#e9f2ec;--line:#d7e4dc;--bone:#0d2b22;--mut:#5b7267;--gold:#0e7a5f;--gold2:#0a5c46;--green:#25d366;--red:#d24a24;--on-accent:#ffffff;--topbar:#0b3d33;--topbar-line:rgba(255,255,255,.16);--mint:#a9dcc6;--shadow:0 6px 24px rgba(13,43,34,.08);--ok-bg:#e3f4e8;--ok-line:#57ab74;--ok-text:#14532d;--demo-bg:#e2f1e7;--rev-bg:linear-gradient(135deg,#ffffff,#e7f3ec);--pricebox-bg:#f2f8f4;--badge-bg:rgba(11,61,51,.88)}
+[data-theme="dark"]{--bg:#0b0b0d;--panel:#151517;--panel2:#1c1c1f;--line:#2a2a2e;--bone:#f2efe6;--mut:#a9a49a;--gold:#e5322d;--gold2:#ff6b5e;--green:#25d366;--red:#e4572e;--on-accent:#ffffff;--topbar:rgba(11,11,13,.96);--topbar-line:#2a2a2e;--mint:#a9dcc6;--shadow:none;--ok-bg:#12351f;--ok-line:#1f7a44;--ok-text:#b9f4cd;--demo-bg:#2e1214;--rev-bg:linear-gradient(135deg,#191712,#101013);--pricebox-bg:#171410;--badge-bg:rgba(11,11,13,.88)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--bone);font-family:'Manrope',sans-serif;font-size:16px;line-height:1.5;overflow-x:hidden}
+h1,h2,h3,.osw{font-family:'Sora',sans-serif;font-weight:700;letter-spacing:-.01em}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+.topbar{position:sticky;top:0;z-index:50;background:var(--topbar);border-bottom:1px solid var(--topbar-line);backdrop-filter:blur(6px)}
+.topbar-in{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 18px;max-width:1120px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand-logo{width:44px;height:44px;object-fit:contain;border-radius:6px;flex:none}
+.brand b{font-family:'Sora',sans-serif;font-size:19px;letter-spacing:.04em;display:block;line-height:1.05}
+.brand small{color:var(--mut);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.switch{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.switch button{background:transparent;border:0;color:var(--mut);font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;padding:7px 14px;border-radius:999px;cursor:pointer}
+.switch button.on{background:var(--gold);color:var(--on-accent)}
+.langs{width:132px;background:var(--panel2);border-color:var(--gold);color:var(--bone);font-size:13px;padding:7px 9px}
+.hero{padding:44px 0 10px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
+.kicker{color:var(--gold);font-weight:700;letter-spacing:.18em;font-size:13px;text-transform:uppercase}
+.hero h1{font-size:clamp(30px,5.4vw,52px);line-height:1.08;margin:12px 0 14px}
+.hero p{color:var(--mut);font-size:18px;max-width:52ch}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:'Manrope',sans-serif}
+.btn-gold{background:var(--gold);color:var(--on-accent)}
+.btn-ghost{background:transparent;color:var(--bone);border-color:var(--line)}
+.btn-wa{background:var(--green);color:#0c2317}
+.hero-img{border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+.hero-img img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.stat b{font-family:'Sora',sans-serif;font-size:28px;color:var(--gold2);display:block;line-height:1}
+.stat span{color:var(--mut);font-size:13.5px}
+section{padding:40px 0 8px}
+.sec-head h2{font-size:clamp(24px,3.6vw,34px)}
+.sec-head p{color:var(--mut);margin-top:6px;max-width:66ch}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.tools input{flex:1 1 220px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--bone);padding:12px 14px;font-size:15px;font-family:'Manrope',sans-serif}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{background:var(--panel);border:1px solid var(--line);color:var(--mut);padding:9px 14px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;font-family:'Manrope',sans-serif}
+.chips button.on{background:var(--gold);border-color:var(--gold);color:var(--on-accent)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.card .ph{position:relative}
+.card .ph img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.badge{position:absolute;top:10px;left:10px;background:var(--badge-bg);color:var(--gold2);border:1px solid var(--gold);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
+.card .bd{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{font-size:19px;line-height:1.2;text-transform:none;font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:0}
+.price{font-family:'Sora',sans-serif;font-size:26px;color:var(--gold2)}
+.meta{color:var(--mut);font-size:14px}
+.feats{display:flex;gap:6px;flex-wrap:wrap}
+.feats span{background:var(--panel2);border:1px solid var(--line);color:var(--mut);font-size:12.5px;padding:4px 9px;border-radius:999px}
+.card .btn{margin-top:auto;justify-content:center}
+.fin{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:28px;box-shadow:var(--shadow)}
+.fin ul{list-style:none;margin-top:14px;display:grid;gap:9px}
+.fin li{padding-left:24px;position:relative;color:var(--bone)}
+.fin li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
+form{display:grid;gap:11px}
+label{font-size:13.5px;color:var(--mut);font-weight:600;display:grid;gap:5px}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:9px;color:var(--bone);padding:11px 12px;font-size:15px;font-family:'Manrope',sans-serif;width:100%}
+.form-note{font-size:12.5px;color:var(--mut)}
+.form-ok{display:none;background:var(--ok-bg);border:1px solid var(--ok-line);color:var(--ok-text);border-radius:10px;padding:12px 14px;font-size:14.5px}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.svc{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.svc b{font-size:16.5px;display:block}
+.svc span{color:var(--mut);font-size:14px}
+.rev{background:var(--rev-bg);border:1px solid var(--gold);border-radius:18px;padding:26px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.rev .big{font-family:'Sora',sans-serif;font-size:44px;color:var(--gold2);line-height:1}
+.contact{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.contact .box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.contact b{display:block;margin-bottom:5px;color:var(--gold2);text-transform:uppercase;font-size:13px;letter-spacing:.1em}
+.contact span{color:var(--mut);font-size:15px}
+footer{border-top:1px solid var(--line);margin-top:46px;padding:22px 0 34px;color:var(--mut);font-size:13px}
+.view{display:none}
+.view.on{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.kpi b{font-family:'Sora',sans-serif;font-size:30px;color:var(--gold2);display:block;line-height:1}
+.kpi span{color:var(--mut);font-size:13.5px}
+.demo-tag{display:inline-block;background:var(--demo-bg);border:1px solid var(--gold);color:var(--gold2);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+.panel h3{font-size:18px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+td,th{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.07em}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700}
+.pill-new{background:#233046;color:#a9c6f5}.pill-an{background:#3a2f14;color:#f0d48a}.pill-ap{background:#14331e;color:#9fe8b4}.pill-sold{background:#3a1d12;color:#f5b08a}
+.funnel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.fcol{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.fcol h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:9px}
+.fcol .item{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:13.5px;margin-bottom:8px}
+.agenda{list-style:none;display:grid;gap:9px}
+.agenda li{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14.5px}
+.agenda b{color:var(--gold2)}
+.prop-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.check{list-style:none;display:grid;gap:10px}
+.check li{padding-left:26px;position:relative}
+.check li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
+.steps{list-style:none;display:grid;gap:12px;counter-reset:st}
+.steps li{padding-left:40px;position:relative}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:-2px;width:27px;height:27px;border-radius:50%;background:var(--gold);color:var(--on-accent);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.price-box{border:1px solid var(--gold);border-radius:18px;padding:22px;background:var(--pricebox-bg);margin-top:16px;box-shadow:var(--shadow)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.svc-grid{grid-template-columns:repeat(2,1fr)}.funnel{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.hero-grid,.fin,.panels,.prop-grid{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.stat{padding:12px}.stat b{font-size:21px}.contact{grid-template-columns:1fr}.svc-grid{grid-template-columns:1fr}.topbar-in{padding:10px 12px}.brand{margin-right:0;width:100%}}
+
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+section[id]{scroll-margin-top:125px}
+textarea{resize:vertical}
+form,.fin>*,.hero-grid>*,.prop-grid>*{min-width:0}
+input,select,textarea{max-width:100%}
+.checkbox{display:flex;align-items:center;gap:9px}.checkbox input{width:auto;accent-color:var(--gold)}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-top:12px}.footer-brand .brand-logo{width:34px;height:34px}
+.creator{display:grid;gap:2px;margin-top:18px;font-size:12px}.creator b{color:var(--bone);font-size:14px}.creator small{font-size:10px;letter-spacing:.09em}
+.prototype-note{font-size:12px;line-height:1.6;margin-top:18px;max-width:100ch}
+.table-scroll{overflow-x:auto;max-width:100%}.panel{min-width:0}.table-scroll table{min-width:430px}
+td small{display:block;color:var(--mut);font-size:12px;overflow-wrap:anywhere}td select{min-width:135px;font-size:13px;padding:7px}
+.vehicle-statuses{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.vehicle-statuses label{min-width:0}
+.fcol{min-width:0}.fcol h4{overflow-wrap:anywhere}.fcol .item{overflow-wrap:anywhere}.fcol .item small{display:block;color:var(--mut)}
+.card-actions{display:grid;gap:8px;margin-top:auto}.card-actions .btn{width:100%}
+.form-ok .btn{margin-top:10px;font-size:14px;padding:8px 12px}
+dialog{margin:auto;width:min(740px,calc(100% - 28px));max-height:90dvh;overflow:auto;background:var(--panel);color:var(--bone);border:1px solid var(--gold);border-radius:18px;padding:22px}
+dialog::backdrop{background:rgba(0,0,0,.8)}.dialog-top{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:14px}.dialog-top h2{font-size:24px}.dialog-close{padding:7px 10px;flex:none}
+.photo-note{display:inline-block;border:1px solid var(--gold);color:var(--gold2);padding:3px 9px;border-radius:999px;margin-top:8px}
+.dialog-photo{width:100%;max-height:320px;object-fit:contain;border-radius:10px;background:var(--bg)}.dialog-info{display:grid;gap:10px;margin-top:12px}.dialog-info form{border-top:1px solid var(--line);margin-top:8px;padding-top:16px}
+@media(max-width:900px){.vehicle-statuses{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){
+ .topbar-in{display:grid;grid-template-columns:minmax(0,1fr) 118px 38px;gap:6px 8px;padding:7px 12px}
+ .brand{grid-column:1/-1;gap:8px;width:auto}.brand .brand-logo{width:36px;height:36px}.brand b{font-size:17px}.brand small{font-size:10px}
+ .switch{width:max-content;max-width:100%;padding:2px;gap:0}.switch button{font-size:12px;padding:6px 9px;line-height:1.4}
+ .langs{width:118px;font-size:12px;padding:6px 7px;height:33px}.hero{padding-top:26px}.vehicle-statuses{grid-template-columns:1fr}
+ .funnel{grid-template-columns:repeat(2,minmax(0,1fr))}dialog{padding:16px}.dialog-top h2{font-size:20px}
+ .panel{padding:15px}table{font-size:13.5px}th,td{padding:7px 4px;overflow-wrap:anywhere}
+ .table-scroll{overflow-x:visible}.table-scroll table{min-width:0}
+ select[data-lead-stage]{max-width:106px;font-size:13px;padding:7px 6px}
+}
+/* ===== Temas Conecta+ (claro) / loja (escuro) ===== */
+.theme-btn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:none;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--bone);cursor:pointer;padding:0}
+.theme-btn svg{display:block}
+.theme-btn .ic-sun{display:none}
+[data-theme="dark"] .theme-btn .ic-sun{display:block}
+[data-theme="dark"] .theme-btn .ic-moon{display:none}
+[data-theme="light"] .brand b{color:#ffffff}
+[data-theme="light"] .brand small{color:var(--mint)}
+[data-theme="light"] .switch{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)}
+[data-theme="light"] .switch button{color:#dcefe6}
+[data-theme="light"] .switch button.on{background:var(--mint);color:#0b3d33}
+[data-theme="light"] .langs{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.35);color:#ffffff}
+[data-theme="light"] .langs option{color:#0d2b22;background:#ffffff}
+[data-theme="light"] .theme-btn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.35);color:#ffffff}
+[data-theme="light"] .badge{color:#d9f5e6;border-color:var(--mint)}
+[data-theme="light"] .pill-new{background:#dbe9fb;color:#274b7a}
+[data-theme="light"] .pill-an{background:#fdf0cd;color:#7a5a10}
+[data-theme="light"] .pill-ap{background:#d8f3e0;color:#14532d}
+[data-theme="light"] .pill-sold{background:#fde3d3;color:#8a3c12}
+</style>
+<script>try{var savedTheme=localStorage.getItem('sasaki-theme');if(savedTheme==='dark'||savedTheme==='light')document.documentElement.setAttribute('data-theme',savedTheme);}catch(e){}</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <img class="brand-logo" src="img/logo.jpg" alt="Sasaki Cars">
+      <div><b>SASAKI CARS</b><small>Iwata · Shizuoka</small></div>
+    </div>
+    <nav class="switch" data-i18n-aria="nav_views" aria-label="Telas da demonstração">
+      <button id="sw-site" aria-label="Site" data-i18n-aria="t_site" aria-pressed="true" class="on" onclick="showView('site')" data-i18n="t_site">Site</button>
+      <button id="sw-aios" aria-label="Conecta+" data-i18n-aria="t_aios" aria-pressed="false" onclick="showView('aios')" data-i18n="t_aios">Conecta+</button>
+      <button id="sw-prop" aria-label="Proposta" data-i18n-aria="t_prop" aria-pressed="false" onclick="showView('prop')" data-i18n="t_prop">Proposta</button>
+    </nav>
+    <select id="lang-select" class="langs" aria-label="Idioma" data-i18n-aria="lang_label" onchange="setLang(this.value)">
+      <option value="pt">Português</option><option value="en">English</option><option value="ja">日本語</option><option value="es">Español</option><option value="tl">Tagalog</option>
+    </select>
+    <button id="theme-btn" class="theme-btn" type="button" data-i18n-aria="theme_btn" aria-label="Alternar tema" title="Alternar tema" onclick="toggleTheme()">
+      <svg class="ic-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="ic-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ============ SITE VIEW ============ -->
+<main id="view-site" class="view on">
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker" data-i18n="hero_kicker">Iwata · Shizuoka</div>
+          <h1 data-i18n="hero_title">Seu carro novo está aqui!</h1>
+          <p data-i18n="hero_sub">Loja brasileira de carros usados em Iwata. Compra, venda e troca, shaken e busca de carro em leilão sob encomenda.</p>
+          <div class="cta-row">
+            <a class="btn btn-gold" href="#estoque" data-i18n="hero_cta1">Ver o estoque</a>
+            <a class="btn btn-ghost" href="#financiamento" data-i18n="hero_cta2">Registrar interesse</a>
+          </div>
+        </div>
+        <div class="hero-img"><img src="img/loja.jpg" alt="Pátio da Sasaki Cars em Iwata"></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>4,8 ★</b><span data-i18n="stat1">nota no Google, 24 avaliações</span></div>
+        <div class="stat"><b>496</b><span data-i18n="stat2">seguidores no Instagram</span></div>
+        <div class="stat"><b>6</b><span data-i18n="stat3">carros nesta amostra de estoque</span></div>
+      </div>
+    </div>
+
+    <section id="estoque">
+      <div class="sec-head">
+        <h2 data-i18n="stock_title">Estoque</h2>
+        <p data-i18n="stock_sub">Carros e dados dos anúncios públicos da loja. As fotos são ilustrativas, do mesmo modelo de cada carro. Disponibilidade e dados devem ser confirmados com a loja.</p>
+      </div>
+      <div class="tools">
+        <input id="q" type="search" data-i18n-ph="search_ph" placeholder="Buscar por modelo..." oninput="renderCars()" aria-label="Buscar por modelo" data-i18n-aria="search_ph">
+      </div>
+      <div class="chips" id="cat-chips" style="margin-bottom:18px">
+        <button data-cat="all" class="on" onclick="setCat('all')" data-i18n="f_all">Todos</button>
+        <button data-cat="compact" onclick="setCat('compact')" data-i18n="f_compact">Compactos</button>
+        <button data-cat="sedan" onclick="setCat('sedan')" data-i18n="f_sedan">Sedã</button>
+        <button data-cat="van" onclick="setCat('van')" data-i18n="f_van">Van / trabalho</button>
+      </div>
+      <div class="grid" id="cars"></div>
+      <p id="no-cars" class="form-note" style="display:none;margin-top:14px" data-i18n="no_cars">Nenhum carro encontrado nessa busca.</p>
+    </section>
+
+    <section id="financiamento">
+      <div class="fin">
+        <div>
+          <h2 data-i18n="fin_title">Como comprar com a Sasaki</h2>
+          <p style="color:var(--mut);margin-top:8px" data-i18n="fin_sub">Registre um interesse fictício para testar a demonstração. Este formulário não solicita crédito nem envia mensagens à loja.</p>
+          <ul>
+            <li data-i18n="fin_p1">Compra, venda e troca: seu carro atual pode entrar no negócio</li>
+            <li data-i18n="fin_p2">Busca em leilão sob encomenda, por modelo, ano, cor e preço</li>
+            <li data-i18n="fin_p3">Shaken e troca de óleo feitos com a loja</li>
+          </ul>
+          <p class="form-note" style="margin-top:14px" data-i18n="fin_attribution">Serviços anunciados pela própria loja nos seus anúncios e no Google.</p>
+        </div>
+        <form id="fin-form" autocomplete="off" onsubmit="return submitFin(event)">
+          <h3 data-i18n="interest_title">Manifestação de interesse, demonstração</h3>
+          <p class="form-note" data-i18n="form_demo">Demonstração: use dados fictícios. Nada é enviado nem sai desta página.</p>
+          <label><span data-i18n="fm_name">Nome</span><input required id="fm-name" maxlength="100" pattern=".*\S.*"></label>
+          <label><span data-i18n="fm_wa">WhatsApp</span><input required id="fm-phone" type="tel" maxlength="100" pattern=".*\S.*"></label>
+          <label><span data-i18n="fm_car">Carro de interesse</span><select id="fm-car"></select></label>
+          <label class="checkbox"><input type="checkbox" id="fm-financing"><span data-i18n="fm_financing">Tenho interesse em financiamento</span></label>
+          <label><span data-i18n="fm_message">Mensagem opcional</span><textarea id="fm-message" rows="3" maxlength="1000"></textarea></label>
+          <button class="btn btn-gold" type="submit" data-i18n="fm_send">Registrar na demonstração</button>
+          <div class="form-ok" id="fin-ok" role="status" aria-live="polite"><p data-i18n="form_ok">Interesse registrado só na memória desta página. Nada foi enviado à loja. Ao recarregar, os registros são apagados.</p><button type="button" class="btn btn-ghost" onclick="showView('aios')" data-i18n="btn_aios">Ver no Conecta+</button></div>
+          <p class="form-note" data-i18n="form_note">Demonstração criada pela Conecta+. Os registros ficam apenas nesta página.</p>
+        </form>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 data-i18n="svc_title">A loja também faz</h2></div>
+      <div class="svc-grid">
+        <div class="svc"><b data-i18n="sv_mech">Compra, venda e troca</b><span data-i18n="sv_mech_d">Seu carro atual pode entrar como entrada ou ser comprado pela loja</span></div>
+        <div class="svc"><b data-i18n="sv_shaken">Shaken</b><span data-i18n="sv_shaken_d">Shaken resolvido com a loja</span></div>
+        <div class="svc"><b data-i18n="sv_tire">Busca em leilão sob encomenda</b><span data-i18n="sv_tire_d">Por modelo, ano, cor e preço</span></div>
+        <div class="svc"><b data-i18n="sv_rent">Aluguel de kei truck</b><span data-i18n="sv_rent_d">Para mudança e descartes, ¥5.000 por dia</span></div>
+        <div class="svc"><b data-i18n="sv_ins">Guincho 24h</b><span data-i18n="sv_ins_d">Para todo o Japão</span></div>
+        <div class="svc"><b data-i18n="sv_tow">Troca de óleo</b><span data-i18n="sv_tow_d">Manutenção rápida na loja</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="rev">
+        <div>
+          <div class="big">4,8 ★</div>
+          <p style="color:var(--mut);max-width:52ch" data-i18n="rev_text">Nota da Sasaki Cars no Google, com 24 avaliações de clientes.</p>
+        </div>
+        <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sasaki%20Cars%20Iwata" data-i18n="rev_cta">Ver no Google Maps</a>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2 data-i18n="ct_title">Fala com a loja</h2></div>
+      <div class="contact">
+        <div class="box"><b data-i18n="ct_addr">Endereço</b><span>〒437-1203 Shizuoka-ken, Iwata-shi, Fukude 2262-1</span></div>
+        <div class="box"><b data-i18n="ct_phone">Telefone / WhatsApp</b><span><a href="tel:+819060290997">090-6029-0997</a></span></div>
+        <div class="box"><b data-i18n="ct_hours">Horário</b><span data-i18n="ct_hours_v">Seg a sex 9h às 18h · Sáb 9h às 17h · Dom 13h às 17h</span></div>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/819060290997" data-i18n="ct_wa">Chamar no WhatsApp</a>
+        <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://www.instagram.com/sasaki.cars/" data-i18n="ct_ig">Instagram da loja</a>
+      </div>
+    </section>
+
+    <footer>
+      <p data-i18n="foot_note">Demonstração criada pela Conecta+ com dados públicos da loja no Instagram e no Google. Confirme disponibilidade e dados com a loja.</p>
+      <div class="footer-brand"><img class="brand-logo" src="img/logo.jpg" alt="Sasaki Cars" loading="lazy"><p>Sasaki Cars · Iwata, Shizuoka</p></div>
+      <div class="creator"><b>Conecta+</b><span data-i18n="brand_slogan">Seu negócio. Tudo conectado.</span><small data-i18n="brand_signature">GESTÃO • CLIENTES • AUTOMAÇÃO</small></div>
+      <p class="prototype-note" data-i18n="prototype_notice">Protótipo não oficial. Carros, dados e preços dos anúncios públicos da loja; as fotos dos carros são ilustrativas, do mesmo modelo. A Sasaki Cars não contratou, não aprovou e não tem vínculo com este site. A logomarca pertence à Sasaki Cars e seu uso comercial depende de autorização do proprietário.</p>
+    </footer>
+  </div>
+</main>
+<!-- ============ CONECTA+ VIEW ============ -->
+<main id="view-aios" class="view">
+  <div class="wrap" style="padding-top:34px">
+    <span class="demo-tag" data-i18n="a_demo">Dados de demonstração</span>
+    <p class="form-note" style="margin-top:8px" data-i18n="a_connection">Sem conexão com o sistema real da Sasaki Cars.</p>
+    <h2 style="font-size:clamp(24px,3.6vw,34px);margin-top:12px" data-i18n="a_title">Conecta+ da Sasaki Cars</h2>
+    <p style="color:var(--mut);margin-top:6px;max-width:66ch" data-i18n="a_sub">Demonstração de estoque, interessados e agenda da loja. Teste os formulários e altere etapas e status nesta página.</p>
+    <div class="kpis">
+      <div class="kpi"><b id="kpi-1">0</b><span data-i18n="a_k1">carros na demonstração</span></div>
+      <div class="kpi"><b id="kpi-2">0</b><span data-i18n="a_k2">interessados novos</span></div>
+      <div class="kpi"><b id="kpi-3">0</b><span data-i18n="a_k3">interessados aguardando contato</span></div>
+      <div class="kpi"><b id="kpi-4">0</b><span data-i18n="a_k4">itens na agenda de exemplo</span></div>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <h3 data-i18n="a_leads">Interessados</h3>
+        <div class="table-scroll" role="region" tabindex="0" data-i18n-aria="a_leads" aria-label="Interessados"><table>
+          <thead><tr><th scope="col" data-i18n="a_th_who">Quem</th><th scope="col" data-i18n="a_th_car">Carro</th><th scope="col" data-i18n="a_th_st">Etapa</th></tr></thead>
+          <tbody id="leads-body"></tbody>
+        </table></div>
+      </div>
+      <div class="panel">
+        <h3 data-i18n="a_agenda">Agenda da loja</h3>
+        <p class="form-note" data-i18n="a_demo">Dados de demonstração</p>
+        <ul class="agenda">
+          <li><b data-i18n="ag_1d">Hoje</b> · <span data-i18n="ag_1">Shaken de carro vendido pela loja, cliente da loja</span></li>
+          <li><b data-i18n="ag_2d">Amanhã</b> · <span data-i18n="ag_2">Entrega da Voxy vendida, cliente busca na loja</span></li>
+          <li><b data-i18n="ag_3d">Em 9 dias</b> · <span data-i18n="ag_3">Shaken vencendo: lembrete já marcado pro cliente</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h3 data-i18n="a_funnel">Funil de vendas</h3>
+      <div class="funnel" id="funnel"></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h3 data-i18n="a_vehicles">Status dos veículos</h3>
+      <div class="vehicle-statuses" id="vehicle-statuses"></div>
+    </div>
+    <footer><p data-i18n="a_foot">Os formulários desta página alimentam esta demonstração. Os registros e alterações ficam apenas na memória e são apagados ao recarregar.</p><p class="prototype-note" data-i18n="prototype_notice">Protótipo não oficial. Carros, dados e preços dos anúncios públicos da loja; as fotos dos carros são ilustrativas, do mesmo modelo. A Sasaki Cars não contratou, não aprovou e não tem vínculo com este site. A logomarca pertence à Sasaki Cars e seu uso comercial depende de autorização do proprietário.</p></footer>
+  </div>
+  <div class="conecta-frame-wrap" style="padding:6px 18px 4px;max-width:1120px;margin:0 auto"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><strong style="font-size:15px">Painel da loja no Conecta+, no formato oficial</strong><a href="https://smsato80.github.io/conecta-sasaki/" target="_blank" rel="noopener" style="font-weight:700;text-decoration:underline">Abrir em tela cheia</a></div><iframe src="https://smsato80.github.io/conecta-sasaki/" title="Demo Conecta+ Sasaki Cars" style="width:100%;height:76vh;min-height:600px;border:0;border-radius:14px"></iframe></div><style>#view-aios > *:not(.conecta-frame-wrap){display:none !important}</style>
+</main>
+
+<!-- ============ PROPOSTA VIEW ============ -->
+<main id="view-prop" class="view">
+  <div class="wrap" style="padding-top:34px">
+    <h2 style="font-size:clamp(24px,3.6vw,34px)" data-i18n="p_title">Sasaki Cars: proposta de demonstração da Conecta+</h2>
+    <p style="color:var(--mut);margin-top:6px;max-width:66ch" data-i18n="p_sub">Esta proposta apresenta o que pode ser testado nesta página. Qualquer uso comercial depende de acordo e autorização da loja.</p>
+    <div class="prop-grid">
+      <div class="panel">
+        <h3 data-i18n="p_what">O que esta página demonstra</h3>
+        <ul class="check">
+          <li data-i18n="p_i1">Estoque com busca, filtros e detalhes de cada carro em modal</li>
+          <li data-i18n="p_i2">Conecta+ com interessados, etapas e funil calculado na página</li>
+          <li data-i18n="p_i3">Formulários de interesse fictício, sem envio de dados</li>
+          <li data-i18n="p_i4">Links para o WhatsApp, Instagram e Google Maps da loja</li>
+          <li data-i18n="p_i5">Conteúdo em português, inglês, japonês, espanhol e tagalog</li>
+          <li data-i18n="p_i6">Status de cada carro: anunciado, disponível, reservado e vendido</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3 data-i18n="p_how">Como testar</h3>
+        <ul class="steps">
+          <li data-i18n="p_s1">Abra os detalhes de um carro e registre um interesse com dados fictícios</li>
+          <li data-i18n="p_s2">Vá ao Conecta+ e altere a etapa do interessado e o status do carro</li>
+          <li data-i18n="p_s3">Volte ao site para ver o selo atualizado. Recarregar apaga as alterações</li>
+        </ul>
+        <h3 style="margin-top:22px" data-i18n="p_not_t">Fora desta demonstração</h3>
+        <p style="color:var(--mut);font-size:15px" data-i18n="p_not">Não há envio de mensagens, análise de crédito, conexão com sistemas da loja ou salvamento permanente. Essas funções exigiriam outro escopo e autorização.</p>
+      </div>
+    </div>
+    <div class="price-box">
+      <h3 data-i18n="p_price_t">Valores e prazo</h3>
+      <p style="color:var(--mut);margin-top:6px" data-i18n="p_price">Valor a combinar. O prazo depende do escopo acordado com a Conecta+ e da autorização da Sasaki Cars. Esta demonstração não é uma contratação.</p>
+    </div>
+    <footer><p data-i18n="p_foot">Demonstração e proposta criadas pela Conecta+, sem vínculo com a Sasaki Cars.</p><div class="creator"><b>Conecta+</b><span data-i18n="brand_slogan">Seu negócio. Tudo conectado.</span><small data-i18n="brand_signature">GESTÃO • CLIENTES • AUTOMAÇÃO</small></div><p class="prototype-note" data-i18n="prototype_notice">Protótipo não oficial. Carros, dados e preços dos anúncios públicos da loja; as fotos dos carros são ilustrativas, do mesmo modelo. A Sasaki Cars não contratou, não aprovou e não tem vínculo com este site. A logomarca pertence à Sasaki Cars e seu uso comercial depende de autorização do proprietário.</p></footer>
+  </div>
+</main>
+
+<dialog id="car-dialog" aria-labelledby="dialog-title">
+  <div class="dialog-top"><h2 id="dialog-title"></h2><button type="button" class="btn btn-ghost dialog-close" onclick="closeCar()" data-i18n-aria="modal_close" aria-label="Fechar detalhes" autofocus>×</button></div>
+  <img id="dialog-photo" class="dialog-photo" alt="">
+  <p class="form-note photo-note" data-i18n="photo_note"></p>
+  <div class="dialog-info">
+    <div id="dialog-price" class="price"></div><div id="dialog-km" class="meta"></div><div id="dialog-feats" class="feats"></div>
+    <a id="dialog-wa" class="btn btn-wa" target="_blank" rel="noopener" data-i18n="ct_wa"></a>
+    <form id="interest-form" autocomplete="off" onsubmit="return submitInterest(event)">
+      <h3 data-i18n="interest_title"></h3><p class="form-note" data-i18n="form_demo"></p>
+      <label><span data-i18n="fm_name"></span><input id="interest-name" required maxlength="100" pattern=".*\S.*"></label>
+      <label><span data-i18n="fm_contact"></span><input id="interest-contact" required maxlength="100" pattern=".*\S.*"></label>
+      <label><span data-i18n="fm_message"></span><textarea id="interest-message" rows="3" maxlength="1000"></textarea></label>
+      <button type="submit" class="btn btn-gold" data-i18n="fm_send"></button>
+      <div id="interest-ok" class="form-ok" role="status" aria-live="polite"><p data-i18n="form_ok"></p><button type="button" class="btn btn-ghost" onclick="closeCar();showView('aios')" data-i18n="btn_aios"></button></div>
+    </form>
+  </div>
+</dialog>
+
+<script>
+const I18N={
+  "pt": {
+    "t_site": "Site",
+    "t_aios": "Conecta+",
+    "t_prop": "Proposta",
+    "hero_kicker": "Iwata · Shizuoka",
+    "hero_title": "Seu carro novo está aqui!",
+    "hero_sub": "Loja brasileira de carros usados em Iwata. Compra, venda e troca, shaken e busca de carro em leilão sob encomenda.",
+    "hero_cta1": "Ver o estoque",
+    "hero_cta2": "Registrar interesse",
+    "stat1": "nota no Google, 24 avaliações",
+    "stat2": "seguidores no Instagram",
+    "stat3": "carros nesta amostra de estoque",
+    "stock_title": "Estoque",
+    "stock_sub": "Carros e dados dos anúncios públicos da loja. As fotos são ilustrativas, do mesmo modelo de cada carro. Disponibilidade e dados devem ser confirmados com a loja.",
+    "search_ph": "Buscar por modelo...",
+    "f_all": "Todos",
+    "f_kei": "Kei",
+    "f_compact": "Compactos",
+    "f_sedan": "Sedã",
+    "f_van": "Van / trabalho",
+    "f_ev": "Elétrico",
+    "no_cars": "Nenhum carro encontrado nessa busca.",
+    "status_avail": "Disponível",
+    "btn_interest": "Tenho interesse",
+    "ft_hybrid": "Híbrido",
+    "ft_screen": "Tela multimídia",
+    "ft_seats": "Bancos em tecido preto",
+    "ft_sliding": "Portas de correr automáticas",
+    "ft_cam360": "Câmera 360°",
+    "ft_push": "Push start",
+    "ft_heated": "Banco aquecido",
+    "ft_manual": "Manual 6 marchas",
+    "ft_awd": "4x4",
+    "ft_leather": "Bancos de couro",
+    "ft_camera": "Câmera de ré",
+    "ft_turbo": "Turbo",
+    "ft_blackroof": "Teto preto",
+    "ft_hightop": "Teto alto",
+    "ft_workfun": "Trabalho e lazer",
+    "ft_electric": "100% elétrico",
+    "ft_quiet": "Silencioso",
+    "ft_lowcost": "Custo por km baixo",
+        "ft_shaken_apr27": "Shaken até abril/2027",
+    "ft_shaken2": "Shaken de 2 anos",
+    "ft_fees": "+ taxas",
+    "ft_total": "Total com taxas",
+    "ft_8seats": "8 lugares",
+    "ft_warranty3": "Garantia de 3 meses",
+    "ft_manual5": "Manual 5 marchas",
+    "ft_v6": "2.5 V6",
+    "ft_shaken_mar27": "Shaken até março/2027",
+    "ft_shaken_new": "Shaken novo na compra",
+    "ft_kei": "Kei 660",
+    "ft_soldtag": "Vendido e entregue",
+    "fin_title": "Como comprar com a Sasaki",
+    "fin_sub": "Registre um interesse fictício para testar a demonstração. Este formulário não envia mensagens à loja.",
+    "fin_p1": "Compra, venda e troca: seu carro atual pode entrar no negócio",
+    "fin_p2": "Busca em leilão sob encomenda, por modelo, ano, cor e preço",
+    "fin_p3": "Shaken e troca de óleo feitos com a loja",
+    "fm_name": "Nome",
+    "fm_wa": "WhatsApp",
+    "fm_car": "Carro de interesse",
+    "fm_other_car": "Outro carro / ainda não sei",
+    "fm_send": "Registrar na demonstração",
+    "form_ok": "Interesse registrado só na memória desta página. Nada foi enviado à loja. Ao recarregar, os registros são apagados.",
+    "form_note": "Demonstração criada pela Conecta+. Os registros ficam apenas nesta página.",
+    "svc_title": "A loja também faz",
+    "sv_mech": "Compra, venda e troca",
+    "sv_mech_d": "Seu carro atual pode entrar como entrada ou ser comprado pela loja",
+    "sv_shaken": "Shaken",
+    "sv_shaken_d": "Shaken resolvido com a loja",
+    "sv_tire": "Busca em leilão sob encomenda",
+    "sv_tire_d": "Por modelo, ano, cor e preço",
+    "sv_rent": "Aluguel de kei truck",
+    "sv_rent_d": "Para mudança e descartes, ¥5.000 por dia",
+    "sv_ins": "Guincho 24h",
+    "sv_ins_d": "Para todo o Japão",
+    "sv_tow": "Troca de óleo",
+    "sv_tow_d": "Manutenção rápida na loja",
+    "rev_text": "Nota da Sasaki Cars no Google, com 24 avaliações de clientes.",
+    "rev_cta": "Ver no Google Maps",
+    "ct_title": "Fala com a loja",
+    "ct_addr": "Endereço",
+    "ct_phone": "Telefone / WhatsApp",
+    "ct_hours": "Horário",
+    "ct_hours_v": "Seg a sex 9h às 18h · Sáb 9h às 17h · Dom 13h às 17h",
+    "ct_wa": "Chamar no WhatsApp",
+    "ct_ig": "Instagram da loja",
+    "foot_note": "Demonstração criada pela Conecta+ com dados públicos da loja no Instagram e no Google. Confirme disponibilidade e dados com a loja.",
+    "a_demo": "Dados de demonstração",
+    "a_title": "Conecta+ da Sasaki Cars",
+    "a_sub": "Demonstração de estoque, interessados e agenda da loja. Teste os formulários e altere etapas e status nesta página.",
+    "a_k1": "carros na demonstração",
+    "a_k2": "interessados novos",
+    "a_k3": "interessados aguardando contato",
+    "a_k4": "itens na agenda de exemplo",
+    "a_leads": "Interessados",
+    "a_th_who": "Quem",
+    "a_th_car": "Carro",
+    "a_th_st": "Etapa",
+    "st_new": "Novo",
+    "st_sold": "Vendido",
+    "a_agenda": "Agenda da loja",
+    "ag_1d": "Hoje",
+    "ag_1": "Shaken de carro vendido pela loja, cliente da loja",
+    "ag_2d": "Amanhã",
+    "ag_2": "Entrega da Voxy vendida, cliente busca na loja",
+    "ag_3d": "Em 9 dias",
+    "ag_3": "Shaken vencendo: lembrete já marcado pro cliente",
+    "a_funnel": "Funil de vendas",
+    "a_foot": "Os formulários desta página alimentam esta demonstração. Os registros e alterações ficam apenas na memória e são apagados ao recarregar.",
+    "p_title": "Sasaki Cars: proposta de demonstração da Conecta+",
+    "p_sub": "Esta proposta apresenta o que pode ser testado nesta página. Qualquer uso comercial depende de acordo e autorização da loja.",
+    "p_what": "O que esta página demonstra",
+    "p_i1": "Estoque com busca, filtros e detalhes de cada carro em modal",
+    "p_i2": "Conecta+ com interessados, etapas e funil calculado na página",
+    "p_i3": "Formulários de interesse fictício, sem envio de dados",
+    "p_i4": "Links para o WhatsApp, Instagram e Google Maps da loja",
+    "p_i5": "Conteúdo em português, inglês, japonês, espanhol e tagalog",
+    "p_i6": "Status de cada carro: anunciado, disponível, reservado e vendido",
+    "p_how": "Como testar",
+    "p_s1": "Abra os detalhes de um carro e registre um interesse com dados fictícios",
+    "p_s2": "Vá ao Conecta+ e altere a etapa do interessado e o status do carro",
+    "p_s3": "Volte ao site para ver o selo atualizado. Recarregar apaga as alterações",
+    "p_not_t": "Fora desta demonstração",
+    "p_not": "Não há envio de mensagens, análise de crédito, conexão com sistemas da loja ou salvamento permanente. Essas funções exigiriam outro escopo e autorização.",
+    "p_price_t": "Valores e prazo",
+    "p_price": "Valor a combinar. O prazo depende do escopo acordado com a Conecta+ e da autorização da Sasaki Cars. Esta demonstração não é uma contratação.",
+    "p_foot": "Demonstração e proposta criadas pela Conecta+, sem vínculo com a Sasaki Cars.",
+    "meta_title": "Sasaki Cars, Iwata • Demonstração Conecta+",
+    "meta_description": "Protótipo não oficial da Sasaki Cars em Iwata. Carros de anúncios públicos e demonstração de controle de interessados, sem envio de dados.",
+    "nav_views": "Telas da demonstração",
+    "lang_label": "Idioma",
+    "theme_btn": "Alternar tema",
+    "brand_slogan": "Seu negócio. Tudo conectado.",
+    "brand_signature": "GESTÃO • CLIENTES • AUTOMAÇÃO",
+    "prototype_notice": "Protótipo não oficial. Carros, dados e preços dos anúncios públicos da loja; as fotos dos carros são ilustrativas, do mesmo modelo. A Sasaki Cars não contratou, não aprovou e não tem vínculo com este site. A logomarca pertence à Sasaki Cars e seu uso comercial depende de autorização do proprietário.",
+    "status_announced": "Anunciado",
+    "status_reserved": "Reservado",
+    "status_sold": "Vendido",
+    "btn_details": "Detalhes",
+    "photo_note": "Foto ilustrativa do mesmo modelo",
+    "modal_close": "Fechar detalhes",
+    "interest_title": "Manifestação de interesse, demonstração",
+    "fm_contact": "Contato",
+    "fm_message": "Mensagem opcional",
+    "fm_financing": "Tenho interesse em financiamento",
+    "form_demo": "Demonstração: use dados fictícios. Nada é enviado nem sai desta página.",
+    "btn_aios": "Ver no Conecta+",
+    "fin_attribution": "Serviços anunciados pela própria loja nos seus anúncios e no Google.",
+    "a_connection": "Sem conexão com o sistema real da Sasaki Cars.",
+    "a_vehicles": "Status dos veículos",
+    "a_status": "Status do veículo",
+    "a_example": "Exemplo",
+    "example_name_1": "Pessoa fictícia 1",
+    "example_name_2": "Pessoa fictícia 2",
+    "st_contact": "Em contato",
+    "st_visit": "Visita marcada",
+    "st_reserved": "Reservado"
+  },
+  "en": {
+    "t_site": "Website",
+    "t_aios": "Conecta+",
+    "t_prop": "Proposal",
+    "hero_kicker": "Iwata · Shizuoka",
+    "hero_title": "Your new car is here!",
+    "hero_sub": "Brazilian used car shop in Iwata. Buying, selling and trade-ins, shaken and auction car search on request.",
+    "hero_cta1": "See the stock",
+    "hero_cta2": "Register interest",
+    "stat1": "Google rating, 24 reviews",
+    "stat2": "followers on Instagram",
+    "stat3": "cars in this stock sample",
+    "stock_title": "Stock",
+    "stock_sub": "Cars and details from the shop's public listings. Photos are illustrative, of the same model as each car. Confirm availability and details with the shop.",
+    "search_ph": "Search by model...",
+    "f_all": "All",
+    "f_kei": "Kei",
+    "f_compact": "Compact",
+    "f_sedan": "Sedan",
+    "f_van": "Van / work",
+    "f_ev": "Electric",
+    "no_cars": "No car found for that search.",
+    "status_avail": "Available",
+    "btn_interest": "I am interested",
+    "ft_hybrid": "Hybrid",
+    "ft_screen": "Multimedia screen",
+    "ft_seats": "Black cloth seats",
+    "ft_sliding": "Automatic sliding doors",
+    "ft_cam360": "360° camera",
+    "ft_push": "Push start",
+    "ft_heated": "Heated seat",
+    "ft_manual": "6-speed manual",
+    "ft_awd": "4WD",
+    "ft_leather": "Leather seats",
+    "ft_camera": "Rear camera",
+    "ft_turbo": "Turbo",
+    "ft_blackroof": "Black roof",
+    "ft_hightop": "High roof",
+    "ft_workfun": "Work and leisure",
+    "ft_electric": "100% electric",
+    "ft_quiet": "Quiet",
+    "ft_lowcost": "Low cost per km",
+        "ft_shaken_apr27": "Shaken until April 2027",
+    "ft_shaken2": "2-year shaken",
+    "ft_fees": "+ fees",
+    "ft_total": "Total incl. fees",
+    "ft_8seats": "8 seats",
+    "ft_warranty3": "3-month warranty",
+    "ft_manual5": "5-speed manual",
+    "ft_v6": "2.5 V6",
+    "ft_shaken_mar27": "Shaken until Mar/2027",
+    "ft_shaken_new": "New shaken on purchase",
+    "ft_kei": "Kei 660",
+    "ft_soldtag": "Sold and delivered",
+    "fin_title": "How buying with Sasaki works",
+    "fin_sub": "Register a fictional interest to try the demo. This form does not send messages to the shop.",
+    "fin_p1": "Buying, selling and trade-ins: your current car can be part of the deal",
+    "fin_p2": "Auction search on request, by model, year, color and price",
+    "fin_p3": "Shaken and oil changes handled with the shop",
+    "fm_name": "Name",
+    "fm_wa": "WhatsApp",
+    "fm_car": "Car of interest",
+    "fm_other_car": "Another car / not sure yet",
+    "fm_send": "Register in the demo",
+    "form_ok": "Interest recorded only in this page's memory. Nothing was sent to the shop. Records are cleared on reload.",
+    "form_note": "Demo created by Conecta+. Records stay only on this page.",
+    "svc_title": "The shop also does",
+    "sv_mech": "Buying, selling and trade-ins",
+    "sv_mech_d": "Your current car can be a trade-in or bought by the shop",
+    "sv_shaken": "Shaken",
+    "sv_shaken_d": "Shaken handled with the shop",
+    "sv_tire": "Auction search on order",
+    "sv_tire_d": "By model, year, color and price",
+    "sv_rent": "Kei truck rental",
+    "sv_rent_d": "For moving and disposal, ¥5,000 per day",
+    "sv_ins": "24h towing",
+    "sv_ins_d": "Anywhere in Japan",
+    "sv_tow": "Oil change",
+    "sv_tow_d": "Quick maintenance at the shop",
+    "rev_text": "Sasaki Cars rating on Google, from 24 customer reviews.",
+    "rev_cta": "See on Google Maps",
+    "ct_title": "Talk to the shop",
+    "ct_addr": "Address",
+    "ct_phone": "Phone / WhatsApp",
+    "ct_hours": "Hours",
+    "ct_hours_v": "Mon to Fri 9am to 6pm · Sat 9am to 5pm · Sun 1pm to 5pm",
+    "ct_wa": "Message on WhatsApp",
+    "ct_ig": "Shop's Instagram",
+    "foot_note": "Demo created by Conecta+ with public shop data from Instagram and Google. Confirm availability and details with the shop.",
+    "a_demo": "Demo data",
+    "a_title": "Sasaki Cars on Conecta+",
+    "a_sub": "Demo of stock, interested customers and the shop schedule. Try the forms and change stages and statuses on this page.",
+    "a_k1": "cars in the demo",
+    "a_k2": "new leads",
+    "a_k3": "interested customers awaiting contact",
+    "a_k4": "items in the example schedule",
+    "a_leads": "Interested customers",
+    "a_th_who": "Who",
+    "a_th_car": "Car",
+    "a_th_st": "Stage",
+    "st_new": "New",
+    "st_sold": "Sold",
+    "a_agenda": "Shop schedule",
+    "ag_1d": "Today",
+    "ag_1": "Shaken for a car sold by the shop, shop customer",
+    "ag_2d": "Tomorrow",
+    "ag_2": "Delivery of the sold Voxy, customer picks it up at the shop",
+    "ag_3d": "In 9 days",
+    "ag_3": "Shaken expiring: reminder already set for the customer",
+    "a_funnel": "Sales funnel",
+    "a_foot": "This page's forms feed this demo. Records and changes stay only in memory and are cleared on reload.",
+    "p_title": "Sasaki Cars: Conecta+ demo proposal",
+    "p_sub": "This proposal describes what you can test on this page. Any commercial use requires an agreement and the shop's authorization.",
+    "p_what": "What this page demonstrates",
+    "p_i1": "Stock with search, filters and a detail modal for each car",
+    "p_i2": "Conecta+ with interested customers, stages and a funnel calculated on the page",
+    "p_i3": "Forms for fictional interest, with no data submission",
+    "p_i4": "Links to the shop's WhatsApp, Instagram and Google Maps",
+    "p_i5": "Content in Portuguese, English, Japanese, Spanish and Tagalog",
+    "p_i6": "Status for each car: listed, available, reserved and sold",
+    "p_how": "How to try it",
+    "p_s1": "Open a car's details and register interest with fictional data",
+    "p_s2": "Go to Conecta+ and change the customer's stage and the car's status",
+    "p_s3": "Return to the site to see the updated badge. Reloading clears changes",
+    "p_not_t": "Outside this demo",
+    "p_not": "There is no message sending, credit review, connection to shop systems or permanent storage. Those features would require a separate scope and authorization.",
+    "p_price_t": "Price and timeline",
+    "p_price": "Price to be agreed. The timeline depends on the scope agreed with Conecta+ and on Sasaki Cars approval. This demo is not a contract.",
+    "p_foot": "Demo and proposal created by Conecta+, with no affiliation to Sasaki Cars.",
+    "meta_title": "Sasaki Cars, Iwata • Conecta+ demo",
+    "meta_description": "Unofficial Sasaki Cars prototype in Iwata. Public car listings and a lead management demo, with no data submission.",
+    "nav_views": "Demo views",
+    "lang_label": "Language",
+    "theme_btn": "Switch theme",
+    "brand_slogan": "Your business. Everything connected.",
+    "brand_signature": "GESTÃO • CLIENTES • AUTOMAÇÃO",
+    "prototype_notice": "Unofficial prototype. Cars, details and prices from the shop's public listings; car photos are illustrative, of the same model. Sasaki Cars did not hire, approve or endorse this website. The logo belongs to Sasaki Cars and commercial use requires the owner's permission.",
+    "status_announced": "Listed",
+    "status_reserved": "Reserved",
+    "status_sold": "Sold",
+    "btn_details": "Details",
+    "photo_note": "Illustrative photo of the same model",
+    "modal_close": "Close details",
+    "interest_title": "Expression of interest, demo",
+    "fm_contact": "Contact",
+    "fm_message": "Optional message",
+    "fm_financing": "I am interested in financing",
+    "form_demo": "Demo: use fictional data. Nothing is sent or leaves this page.",
+    "btn_aios": "View in Conecta+",
+    "fin_attribution": "Services advertised by the shop itself in its listings and on Google.",
+    "a_connection": "No connection to the real Sasaki Cars system.",
+    "a_vehicles": "Vehicle statuses",
+    "a_status": "Vehicle status",
+    "a_example": "Example",
+    "example_name_1": "Fictional person 1",
+    "example_name_2": "Fictional person 2",
+    "st_contact": "In contact",
+    "st_visit": "Visit scheduled",
+    "st_reserved": "Reserved"
+  },
+  "ja": {
+    "t_site": "サイト",
+    "t_aios": "Conecta+",
+    "t_prop": "提案",
+    "hero_kicker": "磐田 · 静岡",
+    "hero_title": "あなたの新しい車はここにあります",
+    "hero_sub": "磐田市のブラジル系中古車店。買取、販売、下取り、車検、オークションでの注文探しに対応します。",
+    "hero_cta1": "在庫を見る",
+    "hero_cta2": "興味を登録する",
+    "stat1": "Googleの評価、24件のレビュー",
+    "stat2": "Instagramのフォロワー",
+    "stat3": "この在庫サンプルの台数",
+    "stock_title": "在庫",
+    "stock_sub": "店舗の公開情報からの車両と詳細。写真は各車と同モデルのイメージです。在庫と詳細は店舗にご確認ください。",
+    "search_ph": "車種で検索...",
+    "f_all": "すべて",
+    "f_kei": "軽自動車",
+    "f_compact": "コンパクト",
+    "f_sedan": "セダン",
+    "f_van": "バン / 仕事用",
+    "f_ev": "電気自動車",
+    "no_cars": "その検索では車が見つかりませんでした。",
+    "status_avail": "販売中",
+    "btn_interest": "興味があります",
+    "ft_hybrid": "ハイブリッド",
+    "ft_screen": "マルチメディア画面",
+    "ft_seats": "黒い布シート",
+    "ft_sliding": "電動スライドドア",
+    "ft_cam360": "360°カメラ",
+    "ft_push": "プッシュスタート",
+    "ft_heated": "シートヒーター",
+    "ft_manual": "6速マニュアル",
+    "ft_awd": "4WD",
+    "ft_leather": "革シート",
+    "ft_camera": "バックカメラ",
+    "ft_turbo": "ターボ",
+    "ft_blackroof": "黒いルーフ",
+    "ft_hightop": "ハイルーフ",
+    "ft_workfun": "仕事とレジャー",
+    "ft_electric": "100%電気",
+    "ft_quiet": "静か",
+    "ft_lowcost": "km単価が安い",
+        "ft_shaken_apr27": "車検 2027年4月まで",
+    "ft_shaken2": "車検2年付き",
+    "ft_fees": "＋諸費用",
+    "ft_total": "支払総額",
+    "ft_8seats": "8人乗り",
+    "ft_warranty3": "保証3ヶ月",
+    "ft_manual5": "5速マニュアル",
+    "ft_v6": "2.5 V6",
+    "ft_shaken_mar27": "車検 2027年3月まで",
+    "ft_shaken_new": "購入時に新規車検",
+    "ft_kei": "軽自動車 660",
+    "ft_soldtag": "売約・納車済み",
+    "fin_title": "Sasaki Carsでの購入について",
+    "fin_sub": "デモを試すために架空の興味を登録してください。このフォームから店舗へメッセージは送信されません。",
+    "fin_p1": "買取、販売、下取り：今の車を交渉に入れることができます",
+    "fin_p2": "モデル、年式、色、価格を指定してオークションで注文探し",
+    "fin_p3": "車検とオイル交換は店舗で対応",
+    "fm_name": "お名前",
+    "fm_wa": "WhatsApp",
+    "fm_car": "気になる車",
+    "fm_other_car": "その他の車 / まだ決めていない",
+    "fm_send": "デモに登録する",
+    "form_ok": "興味をこのページのメモリ内にのみ登録しました。店舗には何も送信されていません。再読み込みすると登録内容は消去されます。",
+    "form_note": "Conecta+が作成したデモです。登録内容はこのページ内にのみ保持されます。",
+    "svc_title": "お店ではこんなことも",
+    "sv_mech": "買取・販売・下取り",
+    "sv_mech_d": "今の車は下取り、または店舗が買取します",
+    "sv_shaken": "車検",
+    "sv_shaken_d": "車検は店舗と一緒に手続き",
+    "sv_tire": "オークション代行検索",
+    "sv_tire_d": "車種・年式・色・価格で探します",
+    "sv_rent": "軽トラックレンタル",
+    "sv_rent_d": "引っ越しや処分に、1日 ¥5,000",
+    "sv_ins": "24時間レッカー",
+    "sv_ins_d": "日本全国対応",
+    "sv_tow": "オイル交換",
+    "sv_tow_d": "店舗でスピーディーに対応",
+    "rev_text": "GoogleでのSasaki Carsの評価、お客様のレビュー24件から。",
+    "rev_cta": "Googleマップで見る",
+    "ct_title": "お店に連絡",
+    "ct_addr": "住所",
+    "ct_phone": "電話 / WhatsApp",
+    "ct_hours": "営業時間",
+    "ct_hours_v": "月〜金 9時〜18時 · 土 9時〜17時 · 日 13時〜17時",
+    "ct_wa": "WhatsAppで連絡",
+    "ct_ig": "お店のInstagram",
+    "foot_note": "InstagramとGoogleの店舗公開情報を用いてConecta+が作成したデモです。在庫状況と情報は店舗にご確認ください。",
+    "a_demo": "デモデータ",
+    "a_title": "Sasaki CarsのConecta+",
+    "a_sub": "在庫、問い合わせ、店舗予定のデモです。このページでフォーム、進捗段階、車両状態の変更をお試しください。",
+    "a_k1": "デモの車両",
+    "a_k2": "新しい見込み客",
+    "a_k3": "連絡待ちの問い合わせ",
+    "a_k4": "予定例の件数",
+    "a_leads": "問い合わせ一覧",
+    "a_th_who": "誰が",
+    "a_th_car": "車",
+    "a_th_st": "段階",
+    "st_new": "新規",
+    "st_sold": "成約",
+    "a_agenda": "店舗の予定",
+    "ag_1d": "今日",
+    "ag_1": "お店で売った車の車検、お店のお客様",
+    "ag_2d": "明日",
+    "ag_2": "販売済みVoxyの引き渡し、お客様が店舗で受け取り",
+    "ag_3d": "9日後",
+    "ag_3": "車検期限が近い：お客様へのリマインド設定済み",
+    "a_funnel": "販売の流れ",
+    "a_foot": "このページのフォームがデモに反映されます。登録や変更はメモリ内にのみ保持され、再読み込みで消去されます。",
+    "p_title": "Sasaki Cars：Conecta+ デモ提案",
+    "p_sub": "この提案はこのページで試せる機能を紹介します。商用利用には店舗との合意と許可が必要です。",
+    "p_what": "このページで試せる機能",
+    "p_i1": "検索・絞り込み・各車両の詳細モーダル付き在庫",
+    "p_i2": "問い合わせ、進捗段階、ページ内で集計するファネルを備えたConecta+",
+    "p_i3": "送信を行わない架空情報の興味登録フォーム",
+    "p_i4": "店舗のWhatsApp・Instagram・Google Mapsへのリンク",
+    "p_i5": "ポルトガル語・英語・日本語・スペイン語・タガログ語の表示",
+    "p_i6": "車両ごとの状態：広告掲載・販売中・予約済み・売約済み",
+    "p_how": "試し方",
+    "p_s1": "車両の詳細を開き、架空の情報で興味を登録",
+    "p_s2": "Conecta+で問い合わせの段階と車両の状態を変更",
+    "p_s3": "サイトに戻って更新された表示を確認。再読み込みで変更は消去",
+    "p_not_t": "このデモの範囲外",
+    "p_not": "メッセージ送信、信用審査、店舗システムへの接続、永続保存はありません。これらには別途の範囲合意と許可が必要です。",
+    "p_price_t": "価格と納期",
+    "p_price": "金額は要相談。期間はConecta+と合意した範囲と、Sasaki Carsの許可によります。このデモは契約ではありません。",
+    "p_foot": "Conecta+が作成したデモと提案で、Sasaki Carsとは関係ありません。",
+    "meta_title": "Sasaki Cars、磐田 • Conecta+デモ",
+    "meta_description": "磐田市のSasaki Carsの非公式プロトタイプ。公開されている車両情報と、データを送信しない見込み客管理のデモ。",
+    "nav_views": "デモ画面",
+    "lang_label": "言語",
+    "theme_btn": "テーマ切替",
+    "brand_slogan": "あなたのビジネス。すべてがつながる。",
+    "brand_signature": "GESTÃO • CLIENTES • AUTOMAÇÃO",
+    "prototype_notice": "非公式プロトタイプ。車両、詳細、価格は店舗の公開情報から。車の写真は同モデルのイメージです。Sasaki Carsはこのサイトを依頼、承認しておらず、関係もありません。ロゴはSasaki Carsに帰属し、商用利用には所有者の許可が必要です。",
+    "status_announced": "広告掲載",
+    "status_reserved": "予約済み",
+    "status_sold": "売約済み",
+    "btn_details": "詳細",
+    "photo_note": "同モデルのイメージ写真",
+    "modal_close": "詳細を閉じる",
+    "interest_title": "興味の登録・デモ",
+    "fm_contact": "連絡先",
+    "fm_message": "メッセージ（任意）",
+    "fm_financing": "ローンに興味があります",
+    "form_demo": "デモです。架空の情報を使用してください。入力内容は送信されず、このページの外に出ることはありません。",
+    "btn_aios": "Conecta+で見る",
+    "fin_attribution": "店舗自身が掲載情報とGoogleで案内しているサービスです。",
+    "a_connection": "Sasaki Carsの実際のシステムとは接続していません。",
+    "a_vehicles": "車両の状態",
+    "a_status": "車両状態",
+    "a_example": "例",
+    "example_name_1": "架空の人物1",
+    "example_name_2": "架空の人物2",
+    "st_contact": "連絡中",
+    "st_visit": "来店予約済み",
+    "st_reserved": "予約済み"
+  },
+  "es": {
+    "t_site": "Sitio",
+    "t_aios": "Conecta+",
+    "t_prop": "Propuesta",
+    "hero_kicker": "Iwata · Shizuoka",
+    "hero_title": "¡Tu auto nuevo está aquí!",
+    "hero_sub": "Tienda brasileña de autos usados en Iwata. Compra, venta y permuta, shaken y búsqueda de autos en subasta por encargo.",
+    "hero_cta1": "Ver el stock",
+    "hero_cta2": "Registrar interés",
+    "stat1": "nota en Google, 24 reseñas",
+    "stat2": "seguidores en Instagram",
+    "stat3": "autos en esta muestra de stock",
+    "stock_title": "Stock",
+    "stock_sub": "Autos y datos de los anuncios públicos de la tienda. Las fotos son ilustrativas, del mismo modelo de cada auto. Confirma disponibilidad y datos con la tienda.",
+    "search_ph": "Buscar por modelo...",
+    "f_all": "Todos",
+    "f_kei": "Kei",
+    "f_compact": "Compactos",
+    "f_sedan": "Sedán",
+    "f_van": "Van / trabajo",
+    "f_ev": "Eléctrico",
+    "no_cars": "Ningún auto encontrado en esa búsqueda.",
+    "status_avail": "Disponible",
+    "btn_interest": "Me interesa",
+    "ft_hybrid": "Híbrido",
+    "ft_screen": "Pantalla multimedia",
+    "ft_seats": "Asientos de tela negra",
+    "ft_sliding": "Puertas corredizas automáticas",
+    "ft_cam360": "Cámara 360°",
+    "ft_push": "Arranque por botón",
+    "ft_heated": "Asiento con calefacción",
+    "ft_manual": "Manual de 6 marchas",
+    "ft_awd": "4x4",
+    "ft_leather": "Asientos de cuero",
+    "ft_camera": "Cámara trasera",
+    "ft_turbo": "Turbo",
+    "ft_blackroof": "Techo negro",
+    "ft_hightop": "Techo alto",
+    "ft_workfun": "Trabajo y paseo",
+    "ft_electric": "100% eléctrico",
+    "ft_quiet": "Silencioso",
+    "ft_lowcost": "Bajo costo por km",
+        "ft_shaken_apr27": "Shaken hasta abril de 2027",
+    "ft_shaken2": "Shaken de 2 años",
+    "ft_fees": "+ gastos",
+    "ft_total": "Total con tasas",
+    "ft_8seats": "8 plazas",
+    "ft_warranty3": "Garantía de 3 meses",
+    "ft_manual5": "Manual de 5 marchas",
+    "ft_v6": "2.5 V6",
+    "ft_shaken_mar27": "Shaken hasta marzo/2027",
+    "ft_shaken_new": "Shaken nuevo en la compra",
+    "ft_kei": "Kei 660",
+    "ft_soldtag": "Vendido y entregado",
+    "fin_title": "Cómo comprar en Sasaki",
+    "fin_sub": "Registra un interés ficticio para probar la demostración. Este formulario no envía mensajes a la tienda.",
+    "fin_p1": "Compra, venta y permuta: tu auto actual puede entrar en el negocio",
+    "fin_p2": "Búsqueda en subasta por encargo, por modelo, año, color y precio",
+    "fin_p3": "Shaken y cambio de aceite con la tienda",
+    "fm_name": "Nombre",
+    "fm_wa": "WhatsApp",
+    "fm_car": "Auto de interés",
+    "fm_other_car": "Otro auto / todavía no sé",
+    "fm_send": "Registrar en la demostración",
+    "form_ok": "Interés registrado solo en la memoria de esta página. No se envió nada a la tienda. Al recargar, los registros se borran.",
+    "form_note": "Demostración creada por Conecta+. Los registros quedan solo en esta página.",
+    "svc_title": "La tienda también hace",
+    "sv_mech": "Compra, venta y permuta",
+    "sv_mech_d": "Tu auto actual puede ser permuta o comprado por la tienda",
+    "sv_shaken": "Shaken",
+    "sv_shaken_d": "Shaken resuelto con la tienda",
+    "sv_tire": "Búsqueda en subasta por encargo",
+    "sv_tire_d": "Por modelo, año, color y precio",
+    "sv_rent": "Alquiler de kei truck",
+    "sv_rent_d": "Para mudanzas y descartes, ¥5.000 por día",
+    "sv_ins": "Grúa 24h",
+    "sv_ins_d": "Para todo Japón",
+    "sv_tow": "Cambio de aceite",
+    "sv_tow_d": "Mantenimiento rápido en la tienda",
+    "rev_text": "Nota de Sasaki Cars en Google, con 24 reseñas de clientes.",
+    "rev_cta": "Ver en Google Maps",
+    "ct_title": "Hable con la tienda",
+    "ct_addr": "Dirección",
+    "ct_phone": "Teléfono / WhatsApp",
+    "ct_hours": "Horario",
+    "ct_hours_v": "Lun a vie 9h a 18h · Sáb 9h a 17h · Dom 13h a 17h",
+    "ct_wa": "Llamar por WhatsApp",
+    "ct_ig": "Instagram de la tienda",
+    "foot_note": "Demostración creada por Conecta+ con datos públicos de la tienda en Instagram y Google. Confirma disponibilidad y datos con la tienda.",
+    "a_demo": "Datos de demostración",
+    "a_title": "Conecta+ de Sasaki Cars",
+    "a_sub": "Demostración de inventario, interesados y agenda de la tienda. Prueba los formularios y cambia etapas y estados en esta página.",
+    "a_k1": "autos en la demostración",
+    "a_k2": "interesados nuevos",
+    "a_k3": "interesados esperando contacto",
+    "a_k4": "eventos en la agenda de ejemplo",
+    "a_leads": "Interesados",
+    "a_th_who": "Quién",
+    "a_th_car": "Auto",
+    "a_th_st": "Etapa",
+    "st_new": "Nuevo",
+    "st_sold": "Vendido",
+    "a_agenda": "Agenda de la tienda",
+    "ag_1d": "Hoy",
+    "ag_1": "Shaken de un auto vendido por la tienda, cliente de la tienda",
+    "ag_2d": "Mañana",
+    "ag_2": "Entrega de la Voxy vendida, el cliente la recoge en la tienda",
+    "ag_3d": "En 9 días",
+    "ag_3": "Shaken por vencer: aviso ya marcado para el cliente",
+    "a_funnel": "Embudo de ventas",
+    "a_foot": "Los formularios de esta página alimentan esta demostración. Los registros y cambios quedan solo en memoria y se borran al recargar.",
+    "p_title": "Sasaki Cars: propuesta de demostración de Conecta+",
+    "p_sub": "Esta propuesta presenta lo que puedes probar en esta página. Cualquier uso comercial requiere acuerdo y autorización de la tienda.",
+    "p_what": "Lo que demuestra esta página",
+    "p_i1": "Inventario con búsqueda, filtros y detalles de cada auto en una ventana",
+    "p_i2": "Conecta+ con interesados, etapas y embudo calculado en la página",
+    "p_i3": "Formularios de interés ficticio, sin envío de datos",
+    "p_i4": "Enlaces al WhatsApp, Instagram y Google Maps de la tienda",
+    "p_i5": "Contenido en portugués, inglés, japonés, español y tagalo",
+    "p_i6": "Estado de cada auto: anunciado, disponible, reservado y vendido",
+    "p_how": "Cómo probarlo",
+    "p_s1": "Abre los detalles de un auto y registra un interés con datos ficticios",
+    "p_s2": "Ve a Conecta+ y cambia la etapa del interesado y el estado del auto",
+    "p_s3": "Vuelve al sitio para ver la etiqueta actualizada. Recargar borra los cambios",
+    "p_not_t": "Fuera de esta demostración",
+    "p_not": "No hay envío de mensajes, análisis de crédito, conexión con sistemas de la tienda ni guardado permanente. Esas funciones requerirían otro alcance y autorización.",
+    "p_price_t": "Valores y plazo",
+    "p_price": "Valor a convenir. El plazo depende del alcance acordado con Conecta+ y de la autorización de Sasaki Cars. Esta demostración no es un contrato.",
+    "p_foot": "Demostración y propuesta creadas por Conecta+, sin vínculo con Sasaki Cars.",
+    "meta_title": "Sasaki Cars, Iwata • Demostración Conecta+",
+    "meta_description": "Prototipo no oficial de Sasaki Cars en Iwata. Autos de anuncios públicos y demostración de control de interesados, sin envío de datos.",
+    "nav_views": "Pantallas de demostración",
+    "lang_label": "Idioma",
+    "theme_btn": "Cambiar tema",
+    "brand_slogan": "Tu negocio. Todo conectado.",
+    "brand_signature": "GESTÃO • CLIENTES • AUTOMAÇÃO",
+    "prototype_notice": "Prototipo no oficial. Autos, datos y precios de los anuncios públicos de la tienda; las fotos de los autos son ilustrativas, del mismo modelo. Sasaki Cars no contrató, no aprobó y no tiene vínculo con este sitio. El logotipo pertenece a Sasaki Cars y su uso comercial depende de la autorización del propietario.",
+    "status_announced": "Anunciado",
+    "status_reserved": "Reservado",
+    "status_sold": "Vendido",
+    "btn_details": "Detalles",
+    "photo_note": "Foto ilustrativa del mismo modelo",
+    "modal_close": "Cerrar detalles",
+    "interest_title": "Manifestación de interés, demostración",
+    "fm_contact": "Contacto",
+    "fm_message": "Mensaje opcional",
+    "fm_financing": "Tengo interés en financiamiento",
+    "form_demo": "Demostración: usa datos ficticios. No se envía nada ni sale de esta página.",
+    "btn_aios": "Ver en Conecta+",
+    "fin_attribution": "Servicios anunciados por la propia tienda en sus anuncios y en Google.",
+    "a_connection": "Sin conexión con el sistema real de Sasaki Cars.",
+    "a_vehicles": "Estado de los vehículos",
+    "a_status": "Estado del vehículo",
+    "a_example": "Ejemplo",
+    "example_name_1": "Persona ficticia 1",
+    "example_name_2": "Persona ficticia 2",
+    "st_contact": "En contacto",
+    "st_visit": "Visita programada",
+    "st_reserved": "Reservado"
+  },
+  "tl": {
+    "t_site": "Site",
+    "t_aios": "Conecta+",
+    "t_prop": "Proposal",
+    "hero_kicker": "Iwata · Shizuoka",
+    "hero_title": "Nandito na ang bago mong kotse!",
+    "hero_sub": "Brazilian na shop ng used cars sa Iwata. Bili, benta at trade-in, shaken at paghahanap sa auction ayon sa order.",
+    "hero_cta1": "Tingnan ang stock",
+    "hero_cta2": "Magrehistro ng interes",
+    "stat1": "rating sa Google, 24 reviews",
+    "stat2": "followers sa Instagram",
+    "stat3": "kotse sa sample ng stock na ito",
+    "stock_title": "Stock",
+    "stock_sub": "Mga kotse at detalye mula sa pampublikong ads ng shop. Ang mga larawan ay ilustrasyon ng parehong modelo ng bawat kotse. Kumpirmahin ang availability at detalye sa shop.",
+    "search_ph": "Maghanap ayon sa modelo...",
+    "f_all": "Lahat",
+    "f_kei": "Kei",
+    "f_compact": "Compact",
+    "f_sedan": "Sedan",
+    "f_van": "Van / trabaho",
+    "f_ev": "Electric",
+    "no_cars": "Walang kotse na nakita sa hanap na iyan.",
+    "status_avail": "Available",
+    "btn_interest": "Interesado ako",
+    "ft_hybrid": "Hybrid",
+    "ft_screen": "Multimedia screen",
+    "ft_seats": "Itim na cloth seats",
+    "ft_sliding": "Automatic sliding doors",
+    "ft_cam360": "360° camera",
+    "ft_push": "Push start",
+    "ft_heated": "Heated seat",
+    "ft_manual": "6-speed manual",
+    "ft_awd": "4WD",
+    "ft_leather": "Leather seats",
+    "ft_camera": "Rear camera",
+    "ft_turbo": "Turbo",
+    "ft_blackroof": "Itim na bubong",
+    "ft_hightop": "Mataas na bubong",
+    "ft_workfun": "Trabaho at pasyal",
+    "ft_electric": "100% electric",
+    "ft_quiet": "Tahimik",
+    "ft_lowcost": "Mababa ang gastos bawat km",
+        "ft_shaken_apr27": "Shaken hanggang Abril 2027",
+    "ft_shaken2": "Shaken na 2 taon",
+    "ft_fees": "+ fees",
+    "ft_total": "Kabuuang may fees",
+    "ft_8seats": "8 upuan",
+    "ft_warranty3": "3 buwang warranty",
+    "ft_manual5": "Manual na 5-speed",
+    "ft_v6": "2.5 V6",
+    "ft_shaken_mar27": "Shaken hanggang Mar/2027",
+    "ft_shaken_new": "Bagong shaken sa pagbili",
+    "ft_kei": "Kei 660",
+    "ft_soldtag": "Nabenta at naihatid na",
+    "fin_title": "Paano bumili sa Sasaki",
+    "fin_sub": "Magrehistro ng kathang-isip na interes para subukan ang demo. Hindi ito nagpapadala ng mensahe sa shop.",
+    "fin_p1": "Bili, benta at trade-in: puwedeng isama ang kotse mo ngayon sa deal",
+    "fin_p2": "Paghahanap sa auction ayon sa order, base sa modelo, taon, kulay at presyo",
+    "fin_p3": "Shaken at oil change sa shop mismo",
+    "fm_name": "Pangalan",
+    "fm_wa": "WhatsApp",
+    "fm_car": "Kotseng interesado ka",
+    "fm_other_car": "Ibang kotse / hindi pa sigurado",
+    "fm_send": "Irehistro sa demo",
+    "form_ok": "Naitala ang interes sa memorya lang ng page na ito. Walang ipinadala sa shop. Mabubura ang mga tala kapag ni-reload.",
+    "form_note": "Demo na ginawa ng Conecta+. Dito lang sa page na ito nananatili ang mga tala.",
+    "svc_title": "Ginagawa rin ng shop",
+    "sv_mech": "Bili, benta at trade-in",
+    "sv_mech_d": "Puwedeng trade-in ang kotse mo o bilhin ng shop",
+    "sv_shaken": "Shaken",
+    "sv_shaken_d": "Inaasikaso ang shaken kasama ang shop",
+    "sv_tire": "Paghahanap sa auction ayon sa order",
+    "sv_tire_d": "Ayon sa modelo, taon, kulay at presyo",
+    "sv_rent": "Rental ng kei truck",
+    "sv_rent_d": "Para sa lipat-bahay at pagtatapon, ¥5,000 bawat araw",
+    "sv_ins": "24h towing",
+    "sv_ins_d": "Sa buong Japan",
+    "sv_tow": "Oil change",
+    "sv_tow_d": "Mabilis na maintenance sa shop",
+    "rev_text": "Rating ng Sasaki Cars sa Google, mula sa 24 reviews ng mga customer.",
+    "rev_cta": "Tingnan sa Google Maps",
+    "ct_title": "Kausapin ang shop",
+    "ct_addr": "Address",
+    "ct_phone": "Telepono / WhatsApp",
+    "ct_hours": "Oras",
+    "ct_hours_v": "Lun hanggang Biy 9am-6pm · Sab 9am-5pm · Lin 1pm-5pm",
+    "ct_wa": "Mag-message sa WhatsApp",
+    "ct_ig": "Instagram ng shop",
+    "foot_note": "Demo na ginawa ng Conecta+ gamit ang pampublikong data ng shop sa Instagram at Google. Kumpirmahin ang availability at detalye sa shop.",
+    "a_demo": "Demo data",
+    "a_title": "Conecta+ ng Sasaki Cars",
+    "a_sub": "Demo ng stock, mga interesado at schedule ng shop. Subukan ang forms at baguhin ang mga stage at status sa page na ito.",
+    "a_k1": "kotse sa demo",
+    "a_k2": "bagong interesado",
+    "a_k3": "interesadong naghihintay ng contact",
+    "a_k4": "item sa halimbawang schedule",
+    "a_leads": "Mga interesado",
+    "a_th_who": "Sino",
+    "a_th_car": "Kotse",
+    "a_th_st": "Stage",
+    "st_new": "Bago",
+    "st_sold": "Nabenta",
+    "a_agenda": "Schedule ng shop",
+    "ag_1d": "Ngayon",
+    "ag_1": "Shaken ng kotseng binenta ng shop, customer ng shop",
+    "ag_2d": "Bukas",
+    "ag_2": "Delivery ng nabentang Voxy, kukunin ng customer sa shop",
+    "ag_3d": "Sa 9 na araw",
+    "ag_3": "Mage-expire ang shaken: naka-set na ang paalala sa customer",
+    "a_funnel": "Sales funnel",
+    "a_foot": "Ang forms sa page na ito ang naglalagay ng mga tala sa demo. Sa memorya lang ang mga tala at pagbabago at mabubura kapag ni-reload.",
+    "p_title": "Sasaki Cars: demo proposal ng Conecta+",
+    "p_sub": "Ipinapakita ng proposal na ito ang puwedeng subukan sa page. Kailangan ng kasunduan at pahintulot ng shop para sa komersyal na paggamit.",
+    "p_what": "Ano ang ipinapakita ng page",
+    "p_i1": "Stock na may search, filters at detalye ng bawat kotse sa modal",
+    "p_i2": "Conecta+ na may mga interesado, stages at funnel na kinakalkula sa page",
+    "p_i3": "Forms ng kathang-isip na interes, walang pagpapadala ng data",
+    "p_i4": "Links sa WhatsApp, Instagram at Google Maps ng shop",
+    "p_i5": "Nilalaman sa Portuguese, English, Japanese, Spanish at Tagalog",
+    "p_i6": "Status ng bawat kotse: naka-post, available, nakareserba at nabenta",
+    "p_how": "Paano subukan",
+    "p_s1": "Buksan ang detalye ng kotse at magrehistro gamit ang kathang-isip na data",
+    "p_s2": "Pumunta sa Conecta+ at baguhin ang stage ng interesado at status ng kotse",
+    "p_s3": "Bumalik sa site para makita ang bagong status. Mabubura ang pagbabago kapag ni-reload",
+    "p_not_t": "Wala sa demo na ito",
+    "p_not": "Walang pagpapadala ng mensahe, credit review, koneksyon sa sistema ng shop o permanenteng pag-save. Kailangan ng hiwalay na saklaw at pahintulot para sa mga iyon.",
+    "p_price_t": "Presyo at timeline",
+    "p_price": "Presyo ay pag-uusapan pa. Ang iskedyul ay depende sa saklaw na napagkasunduan sa Conecta+ at pahintulot ng Sasaki Cars. Hindi kontrata ang demo na ito.",
+    "p_foot": "Demo at proposal na ginawa ng Conecta+, walang kaugnayan sa Sasaki Cars.",
+    "meta_title": "Sasaki Cars, Iwata • Demo ng Conecta+",
+    "meta_description": "Hindi opisyal na prototype ng Sasaki Cars sa Iwata. Mga kotse mula sa pampublikong ads at demo ng pagsubaybay sa mga interesado, walang ipinapadalang data.",
+    "nav_views": "Mga screen ng demo",
+    "lang_label": "Wika",
+    "theme_btn": "Palitan ang tema",
+    "brand_slogan": "Ang negosyo mo. Lahat konektado.",
+    "brand_signature": "GESTÃO • CLIENTES • AUTOMAÇÃO",
+    "prototype_notice": "Hindi opisyal na prototype. Mga kotse, detalye at presyo mula sa pampublikong ads ng shop; ang mga larawan ng kotse ay ilustrasyon ng parehong modelo. Hindi kinontrata o inaprubahan ng Sasaki Cars ang site na ito at wala itong kaugnayan dito. Pag-aari ng Sasaki Cars ang logo at kailangan ang pahintulot ng may-ari para sa komersyal na paggamit.",
+    "status_announced": "Naka-post",
+    "status_reserved": "Nakareserba",
+    "status_sold": "Nabenta",
+    "btn_details": "Mga detalye",
+    "photo_note": "Ilustrasyong larawan ng parehong modelo",
+    "modal_close": "Isara ang mga detalye",
+    "interest_title": "Pagpapahayag ng interes, demo",
+    "fm_contact": "Contact",
+    "fm_message": "Opsyonal na mensahe",
+    "fm_financing": "Interesado ako sa financing",
+    "form_demo": "Demo: gumamit ng kathang-isip na data. Walang ipinapadala o lumalabas sa page na ito.",
+    "btn_aios": "Tingnan sa Conecta+",
+    "fin_attribution": "Mga serbisyong ina-advertise ng shop mismo sa mga ad nito at sa Google.",
+    "a_connection": "Walang koneksyon sa tunay na sistema ng Sasaki Cars.",
+    "a_vehicles": "Status ng mga kotse",
+    "a_status": "Status ng kotse",
+    "a_example": "Halimbawa",
+    "example_name_1": "Kathang-isip na tao 1",
+    "example_name_2": "Kathang-isip na tao 2",
+    "st_contact": "Kinokontak",
+    "st_visit": "Naka-iskedyul ang pagbisita",
+    "st_reserved": "Nakareserba"
+  }
+};
+</script>
+<script>
+const CARS=[
+ {id:'voxy',img:'img/voxy.jpg',name:'Toyota Voxy 2.0 ZS',price:1450000,fees:false,km:'113.000 km',detail:'2015 (H27)',cat:'van',tag:null,feats:['total','8seats','warranty3']},
+ {id:'jimny',img:'img/jimny.jpg',name:'Suzuki Jimny',price:400000,fees:false,km:'',detail:'1987 (S62)',cat:'van',tag:null,feats:['total','awd','manual5']},
+ {id:'markx',img:'img/markx.jpg',name:'Toyota Mark X 250G',price:580000,fees:false,km:'125.000 km',detail:'2010 (H22)',cat:'sedan',tag:null,feats:['total','v6']},
+ {id:'wagonr',img:'img/wagonr.jpg',name:'Suzuki Wagon R Stingray Hybrid X',price:840000,fees:false,km:'54.000 km',detail:'2019 (H31)',cat:'compact',tag:null,feats:['total','hybrid','shaken_mar27']},
+ {id:'dayz',img:'img/dayz.jpg',name:'Nissan Dayz Roox 660 S',price:380000,fees:false,km:'80.000 km',detail:'2015 (H27)',cat:'compact',tag:null,feats:['total','sliding','shaken_new']},
+ {id:'life',img:'img/life.jpg',name:'Honda Life 660 G',price:250000,fees:false,km:'37.000 km',detail:'2000 (H12)',cat:'compact',tag:null,feats:['total','kei']}
+];
+// All demo records live only in this object. Reloading restores these examples.
+const DEMO={
+  vehicleStatus:Object.fromEntries(CARS.map(car=>[car.id,'anunciado'])),
+  leads:[
+    {id:1,nameKey:'example_name_1',carId:'wagonr',stage:'novo',example:true,contact:'',message:'',financing:false},
+    {id:2,nameKey:'example_name_2',carId:'voxy',stage:'em_contato',example:true,contact:'',message:'',financing:false}
+  ],
+  nextLeadId:3,
+  activeCarId:null
+};
+DEMO.vehicleStatus={voxy:'vendido',jimny:'disponivel',markx:'disponivel',wagonr:'disponivel',dayz:'disponivel',life:'disponivel'};
+const STAGES={novo:'st_new',em_contato:'st_contact',visita_marcada:'st_visit',reservado:'st_reserved',vendido:'st_sold'};
+const STATUSES={anunciado:'status_announced',disponivel:'status_avail',reservado:'status_reserved',vendido:'status_sold'};
+let LANG='pt', CAT='all';
+function T(key){return I18N[LANG][key]||key;}
+function esc(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmt(n){return '¥'+n.toLocaleString(LANG==='pt'?'pt-BR':LANG==='ja'?'ja-JP':LANG==='es'?'es-ES':'en-US');}
+function waLink(car){
+ const msgs={pt:'Olá! Vi o '+car.name+' ('+priceText(car)+') no site da Sasaki Cars e tenho interesse.',
+ en:'Hello! I saw the '+car.name+' ('+priceText(car)+') on the Sasaki Cars website and I am interested.',
+ ja:'こんにちは。Sasaki Carsのサイトで'+car.name+'（'+priceText(car)+'）を見て、興味があります。',
+ es:'Hola, vi el '+car.name+' ('+priceText(car)+') en el sitio de Sasaki Cars y me interesa.',
+ tl:'Kumusta! Nakita ko ang '+car.name+' ('+priceText(car)+') sa site ng Sasaki Cars at interesado ako.'};
+ return 'https://wa.me/819060290997?text='+encodeURIComponent(msgs[LANG]);
+}
+function options(values,current){
+ return Object.entries(values).map(([value,key])=>'<option value="'+value+'"'+(value===current?' selected':'')+'>'+esc(T(key))+'</option>').join('');
+}
+function priceText(c){return c.price?fmt(c.price)+(c.fees?' '+T('ft_fees'):''):T('status_sold');}
+function metaText(c){return [c.detail,c.km,c.tag?T('ft_'+c.tag):''].filter(Boolean).join(' · ');}
+function renderCars(){
+ const q=document.getElementById('q').value.trim().toLowerCase();
+ const cars=CARS.filter(c=>(CAT==='all'||c.cat===CAT)&&c.name.toLowerCase().includes(q));
+ document.getElementById('cars').innerHTML=cars.map(c=>
+  '<article class="card"><div class="ph"><img src="'+c.img+'" alt="'+esc(c.name)+'" loading="lazy"><span class="badge" data-car-status="'+c.id+'">'+T(STATUSES[DEMO.vehicleStatus[c.id]])+'</span></div>'+
+  '<div class="bd"><h3>'+esc(c.name)+'</h3><div class="price">'+priceText(c)+'</div><div class="meta">'+metaText(c)+'</div>'+
+  '<div class="feats">'+c.feats.map(f=>'<span>'+T('ft_'+f)+'</span>').join('')+'</div><div class="card-actions">'+
+  '<button class="btn btn-ghost" type="button" data-car-details="'+c.id+'" aria-label="'+esc(T('btn_details')+': '+c.name)+'">'+T('btn_details')+'</button>'+
+  (DEMO.vehicleStatus[c.id]==='vendido'?'':'<a class="btn btn-wa" target="_blank" rel="noopener" href="'+waLink(c)+'">'+T('btn_interest')+'</a>')+'</div></div></article>'
+ ).join('');
+ document.getElementById('no-cars').style.display=cars.length?'none':'block';
+}
+function renderCarChoices(){
+ const select=document.getElementById('fm-car'),current=select.value||'other';
+ select.innerHTML='<option value="other">'+T('fm_other_car')+'</option>'+CARS.map(c=>'<option value="'+c.id+'">'+esc(c.name)+(c.price?' · '+fmt(c.price):'')+'</option>').join('');
+ select.value=current;
+}
+function leadName(lead){return lead.example?T(lead.nameKey):lead.name;}
+function leadCar(lead){const car=CARS.find(c=>c.id===lead.carId);return car?car.name:T('fm_other_car');}
+function renderAIOS(){
+ document.getElementById('leads-body').innerHTML=DEMO.leads.map(lead=>
+  '<tr><td>'+esc(leadName(lead))+(lead.example?' <span class="pill pill-new">'+T('a_example')+'</span>':'')+
+  (lead.contact?'<small>'+esc(lead.contact)+'</small>':'')+(lead.message?'<small>'+esc(lead.message)+'</small>':'')+
+  (lead.financing?'<small>'+T('fm_financing')+'</small>':'')+'</td><td>'+esc(leadCar(lead))+'</td><td><select data-lead-stage="'+lead.id+'" aria-label="'+esc(T('a_th_st')+': '+leadName(lead))+'">'+options(STAGES,lead.stage)+'</select></td></tr>'
+ ).join('');
+ document.getElementById('vehicle-statuses').innerHTML=CARS.map(car=>
+  '<label><span>'+esc(car.name)+'</span><select data-vehicle-status="'+car.id+'" aria-label="'+esc(T('a_status')+': '+car.name)+'">'+options(STATUSES,DEMO.vehicleStatus[car.id])+'</select></label>'
+ ).join('');
+ document.getElementById('funnel').innerHTML=Object.entries(STAGES).map(([stage,key])=>{
+  const leads=DEMO.leads.filter(lead=>lead.stage===stage);
+  return '<div class="fcol" data-stage="'+stage+'"><h4>'+T(key)+' <span>('+leads.length+')</span></h4>'+leads.map(lead=>
+   '<div class="item">'+esc(leadCar(lead))+'<small>'+esc(leadName(lead))+(lead.example?' · '+T('a_example'):'')+'</small></div>'
+  ).join('')+'</div>';
+ }).join('');
+ document.getElementById('kpi-1').textContent=CARS.length;
+ document.getElementById('kpi-2').textContent=DEMO.leads.filter(lead=>lead.stage==='novo').length;
+ document.getElementById('kpi-3').textContent=DEMO.leads.filter(lead=>lead.stage==='novo').length;
+ document.getElementById('kpi-4').textContent=document.querySelectorAll('.agenda li').length;
+}
+function renderCarDialog(){
+ const car=CARS.find(c=>c.id===DEMO.activeCarId);if(!car)return;
+ document.getElementById('dialog-title').textContent=car.name;
+ const photo=document.getElementById('dialog-photo');photo.src=car.img;photo.alt=car.name;
+ document.getElementById('dialog-price').textContent=priceText(car);
+ document.getElementById('dialog-km').textContent=metaText(car);
+ document.getElementById('dialog-feats').innerHTML=car.feats.map(f=>'<span>'+T('ft_'+f)+'</span>').join('');
+ document.getElementById('dialog-wa').href=waLink(car);
+}
+function openCar(id){
+ if(!CARS.some(car=>car.id===id))return;
+ DEMO.activeCarId=id;
+ document.getElementById('interest-form').reset();
+ document.getElementById('interest-ok').style.display='none';
+ renderCarDialog();document.getElementById('car-dialog').showModal();
+}
+function closeCar(){document.getElementById('car-dialog').close();}
+function addInterest({name,contact,carId,message,financing=false}){
+ DEMO.leads.push({id:DEMO.nextLeadId++,name:name.trim(),contact:contact.trim(),carId,message:message.trim(),financing,stage:'novo',example:false});
+ renderAIOS();
+}
+function submitInterest(event){
+ event.preventDefault();
+ addInterest({name:document.getElementById('interest-name').value,contact:document.getElementById('interest-contact').value,carId:DEMO.activeCarId,message:document.getElementById('interest-message').value});
+ event.target.reset();document.getElementById('interest-ok').style.display='block';return false;
+}
+function submitFin(event){
+ event.preventDefault();
+ addInterest({name:document.getElementById('fm-name').value,contact:document.getElementById('fm-phone').value,carId:document.getElementById('fm-car').value,message:document.getElementById('fm-message').value,financing:document.getElementById('fm-financing').checked});
+ event.target.reset();document.getElementById('fin-ok').style.display='block';return false;
+}
+function setCat(cat){CAT=cat;document.querySelectorAll('#cat-chips button').forEach(button=>button.classList.toggle('on',button.dataset.cat===cat));renderCars();}
+function showView(view){
+ if(!['site','aios','prop'].includes(view))return;
+ ['site','aios','prop'].forEach(key=>{
+  document.getElementById('view-'+key).classList.toggle('on',key===view);
+  const button=document.getElementById('sw-'+key);button.classList.toggle('on',key===view);button.setAttribute('aria-pressed',String(key===view));
+ });
+ window.scrollTo({top:0});
+}
+function setLang(lang){
+ if(!Object.hasOwn(I18N,lang))return;
+ LANG=lang;document.documentElement.lang=lang==='pt'?'pt-BR':lang;
+ document.getElementById('lang-select').value=lang;
+ document.title=T('meta_title');document.querySelector('meta[name="description"]').content=T('meta_description');
+ document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=T(el.dataset.i18n);});
+ document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=T(el.dataset.i18nPh);});
+ document.querySelectorAll('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',T(el.dataset.i18nAria));});
+ renderCars();renderCarChoices();renderAIOS();renderCarDialog();
+}
+document.getElementById('cars').addEventListener('click',event=>{
+ const button=event.target.closest('[data-car-details]');if(button)openCar(button.dataset.carDetails);
+});
+document.getElementById('leads-body').addEventListener('change',event=>{
+ const id=Number(event.target.dataset.leadStage),lead=DEMO.leads.find(item=>item.id===id),stage=event.target.value;
+ if(lead&&Object.hasOwn(STAGES,stage)){lead.stage=stage;renderAIOS();}
+});
+document.getElementById('vehicle-statuses').addEventListener('change',event=>{
+ const id=event.target.dataset.vehicleStatus,status=event.target.value;
+ if(Object.hasOwn(DEMO.vehicleStatus,id)&&Object.hasOwn(STATUSES,status)){DEMO.vehicleStatus[id]=status;renderCars();}
+});
+setLang('pt');
+(function(){const params=new URLSearchParams(location.search);const lang=params.get('lang'),view=params.get('view');if(lang)setLang(lang);if(view)showView(view);})();
+</script>
+<script>
+function toggleTheme(){var h=document.documentElement;var next=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',next);try{localStorage.setItem('sasaki-theme',next);}catch(e){}}
+(function(){var b=document.getElementById('theme-btn');if(b&&window.MutationObserver){new MutationObserver(function(){b.title=b.getAttribute('aria-label')||b.title;}).observe(b,{attributes:true,attributeFilter:['aria-label']});}})();
+</script>
+</body>
+</html>
